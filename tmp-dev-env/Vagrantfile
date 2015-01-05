@@ -1,0 +1,20 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby tabstop=2 :
+
+box_ver = "20140121"
+box_url = "http://vagrant.osuosl.org/centos-6-#{box_ver}.box"
+MOUNT_POINT = '/home/vagrant/project'
+
+Vagrant.configure("2") do |config|
+  config.vm.box       = "centos-6-#{box_ver}"
+  config.vm.hostname  = "project-fish"
+  config.vm.box_url   = "#{box_url}"
+  config.vm.network :private_network, ip: "33.33.33.50"
+  config.vm.synced_folder  ".", MOUNT_POINT
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+    v.cpus = 2
+  end
+
+  config.vm.provision "shell", path: "bin/vagrant_provision.sh"
+end
