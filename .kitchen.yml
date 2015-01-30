@@ -21,13 +21,18 @@ platforms:
   - name: centos-6.6
 
 suites:
-  - name: default
-    run_list:
-      - recipe[whats-fresh::default]
-  - name: develop
+  - name: whats_fresh
     run_list:
       - recipe[postgresql::server]
-      - recipe[whats-fresh::default]
+      - recipe[whats-fresh::whats_fresh]
+    attributes:
+      whats_fresh:
+        make_db: true
+        debug: true
+  - name: working_waterfronts
+    run_list:
+      - recipe[postgresql::server]
+      - recipe[whats-fresh::working_waterfronts]
     attributes:
       whats_fresh:
         make_db: true

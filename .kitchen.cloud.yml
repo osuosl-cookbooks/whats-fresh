@@ -44,18 +44,18 @@ platforms:
 
 
 suites:
-  - name: default
+  - name: whats_fresh
     run_list:
       - recipe[postgresql::server]
-      - recipe[whats-fresh::default]
+      - recipe[whats-fresh::whats_fresh]
     attributes:
       whats_fresh:
         make_db: true
-        debug: false
-  - name: develop
+        debug: true
+  - name: working_waterfronts
     run_list:
       - recipe[postgresql::server]
-      - recipe[whats-fresh::default]
+      - recipe[whats-fresh::working_waterfronts]
     attributes:
       whats_fresh:
         make_db: true
