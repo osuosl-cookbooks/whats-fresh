@@ -64,7 +64,7 @@ nput"
             environment new_resource.environment
           end
           django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
-          base_command = "#{::File.join(django_resource.virtualenv, "bin", "gunicorn")} whats_fresh.wsgi:application"
+          base_command = "#{::File.join(django_resource.virtualenv, "bin", "gunicorn")} #{node['whats_fresh']['application_name']}.wsgi:application"
           command "#{base_command} -c #{new_resource.application.path}/shared/gunicorn_config.py"
           directory new_resource.directory.nil? ? ::File.join(new_resource.path, "current", node['whats_fresh']['subdirectory']) : new_resource.directory
           autostart new_resource.autostart

@@ -18,10 +18,11 @@
 #
 node.default['whats_fresh']['application_dir'] = '/opt/working_waterfronts'
 node.default['whats_fresh']['repository'] = 'https://github.com/osu-cass/working-waterfronts-api'
-node.default['whats_fresh']['nginx_name'] = 'working_waterfronts'
+node.default['whats_fresh']['application_name'] = 'working_waterfronts'
+node.default['whats_fresh']['server_name'] = 'ww_server'
 
 # To avoid port collision, use port 8080 for What's Fresh
 # and 8000 for Working Waterfronts
-node.default['whats_fresh']['gunicorn_port'] = 8080
+node.default['whats_fresh']['gunicorn_port'] = 8000
 
 include_recipe 'whats-fresh::_common'

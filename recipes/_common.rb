@@ -89,7 +89,7 @@ template "#{node['whats_fresh']['application_dir']}/config/config.yml" do
   )
 end
 
-application 'whats_fresh' do
+application node['whats_fresh']['application_name'] do
   path node['whats_fresh']['application_dir']
   owner node['whats_fresh']['venv_owner']
   group node['whats_fresh']['venv_group']
@@ -110,7 +110,7 @@ application 'whats_fresh' do
   end
 end
 
-nginx_app 'whats_fresh' do
+nginx_app node['whats_fresh']['application_name'] do
   template 'whats_fresh.conf.erb'
   cookbook 'whats-fresh'
 end
@@ -128,4 +128,9 @@ execute 'collect static files' do
   command "#{python_path} #{manage_py_path} collectstatic --noi"
   user node['whats_fresh']['venv_owner']
   group node['whats_fresh']['venv_group']
+end
+
+selinux_policy_boolean 'httpd_can_network_connect' do
+  value true
+  notifies :start, 'service[nginx]', :immediate
 end
