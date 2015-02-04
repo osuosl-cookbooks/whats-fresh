@@ -129,3 +129,8 @@ execute 'collect static files' do
   user node['whats_fresh']['venv_owner']
   group node['whats_fresh']['venv_group']
 end
+
+selinux_policy_boolean 'httpd_can_network_connect' do
+  value true
+  notifies :start, 'service[nginx]', :immediate
+end
