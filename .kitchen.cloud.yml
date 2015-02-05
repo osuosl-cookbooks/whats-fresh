@@ -9,7 +9,6 @@ driver_config:
   openstack_tenant: <%= ENV['OS_TENANT_NAME'] %>
   floating_ip: <%= ENV['OS_FLOATING_IP'] %>
   flavor_ref: <%= ENV['OS_FLAVOR_REF'] %>
-  floating_ip_pool: <%= ENV['OS_FLOATING_IP_POOL'] %>
 
 provisioner:
   name: chef_solo
@@ -48,6 +47,7 @@ suites:
     run_list:
       - recipe[postgresql::server]
       - recipe[whats-fresh::default]
+      - recipe[working-waterfronts::default]
     attributes:
       whats_fresh:
         make_db: true
@@ -56,6 +56,7 @@ suites:
     run_list:
       - recipe[postgresql::server]
       - recipe[whats-fresh::default]
+      - recipe[working-waterfronts::default]
     attributes:
       whats_fresh:
         make_db: true
