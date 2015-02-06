@@ -96,6 +96,7 @@ application 'whats_fresh' do
   repository node['whats_fresh']['repository']
   revision node['whats_fresh']['git_branch']
   migrate true
+  rollback_on_error false
 
   django do
     requirements 'requirements.txt'

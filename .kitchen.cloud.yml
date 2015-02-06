@@ -48,17 +48,21 @@ suites:
     run_list:
       - recipe[postgresql::server]
       - recipe[whats-fresh::default]
-      - recipe[working-waterfronts::default]
     attributes:
       whats_fresh:
+        make_db: true
+        debug: false
+      working_waterfronts:
         make_db: true
         debug: false
   - name: develop
     run_list:
       - recipe[postgresql::server]
       - recipe[whats-fresh::default]
-      - recipe[working-waterfronts::default]
     attributes:
       whats_fresh:
+        make_db: true
+        debug: true
+      working_waterfronts:
         make_db: true
         debug: true
