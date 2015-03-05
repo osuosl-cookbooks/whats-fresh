@@ -1,5 +1,7 @@
 server {
   listen 80 default_server;
+  access_log <%= node['whats_fresh']['access_log'] %>;
+  error_log <%= node['whats_fresh']['error_log'] %>;
   server_name <%= node['whats_fresh']['server_name'] %>;
 
   location /static/ {
