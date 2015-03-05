@@ -64,22 +64,19 @@ if node['whats_fresh']['make_db']
   end
 end
 
-include_recipe 'whats-fresh::_monkey_patch'
+python_webapp whats-fresh do
+  path '/opt/whats_fresh'
+  owner 'whats_fresh'
+  group 'whats_fresh'
 
-%w(shared static media config).each do |path|
-  directory "#{node['whats_fresh']['application_dir']}/#{path}" do
-    owner node['whats_fresh']['venv_owner']
-    group node['whats_fresh']['venv_group']
-    mode 0755
-    recursive true
-  end
-end
+  repository 'github.com/osu-cass/whats-fresh-api.git'
+  revision :master
 
-template "#{node['whats_fresh']['application_dir']}/config/config.yml" do
-  source 'config.yml.erb'
-  owner node['whats_fresh']['venv_owner']
-  group node['whats_fresh']['venv_group']
-  variables(
+  gunicorn_port 8000
+
+  config_template 'config.yml.erb'
+  config_destination '/opt/whats_fresh/config/config.yml'
+  config_vars (
     host: pg['host'],
     port: pg['port'],
     username: pg['user'],
@@ -89,26 +86,6 @@ template "#{node['whats_fresh']['application_dir']}/config/config.yml" do
   )
 end
 
-application 'whats_fresh' do
-  path node['whats_fresh']['application_dir']
-  owner node['whats_fresh']['venv_owner']
-  group node['whats_fresh']['venv_group']
-  repository node['whats_fresh']['repository']
-  revision node['whats_fresh']['git_branch']
-  migrate true
-
-  django do
-    requirements 'requirements.txt'
-    debug node['whats_fresh']['debug']
-  end
-
-  gunicorn do
-    app_module :django
-    autostart true
-    port node['whats_fresh']['gunicorn_port']
-    loglevel 'debug'
-  end
-end
 
 nginx_app 'whats_fresh' do
   template 'whats_fresh.conf.erb'
@@ -116,19 +93,6 @@ nginx_app 'whats_fresh' do
 end
 
 node.default['nginx']['default_site_enabled'] = false
-
-# Collect static files (css, js, etc)
-python_path = File.join(node['whats_fresh']['application_dir'], 'shared',
-                        'env', 'bin', 'python')
-manage_py_path = File.join(node['whats_fresh']['application_dir'],
-                           'current', node['whats_fresh']['subdirectory'],
-                           'manage.py')
-
-execute 'collect static files' do
-  command "#{python_path} #{manage_py_path} collectstatic --noi"
-  user node['whats_fresh']['venv_owner']
-  group node['whats_fresh']['venv_group']
-end
 
 selinux_policy_boolean 'httpd_can_network_connect' do
   value true
