@@ -21,13 +21,14 @@ include_recipe 'whats-fresh::_centos' if platform_family?('rhel')
 include_recipe 'build-essential'
 include_recipe 'git'
 include_recipe 'python'
+include_recipe 'python-webapp'
 include_recipe 'postgresql::client'
 include_recipe 'database::postgresql'
 include_recipe 'postgis'
 include_recipe 'osl-nginx'
 
 magic_shell_environment 'PATH' do
-  value "/usr/pgsql-9.3/bin:$PATH"
+  value '/usr/pgsql-9.3/bin:$PATH'
 end
 
 pg = Chef::EncryptedDataBagItem.load('whats_fresh',
@@ -64,28 +65,30 @@ if node['whats_fresh']['make_db']
   end
 end
 
-python_webapp whats-fresh do
+settings_hash = {
+  host: pg['host'],
+  port: pg['port'],
+  username: pg['user'],
+  password: pg['pass'],
+  db_name: pg['database_name'],
+  secret_key: pg['secret_key']
+}
+
+python_webapp_common 'whats_fresh' do
+  create_user true
   path '/opt/whats_fresh'
   owner 'whats_fresh'
   group 'whats_fresh'
 
-  repository 'github.com/osu-cass/whats-fresh-api.git'
-  revision :master
+  repository 'https://github.com/osu-cass/whats-fresh-api.git'
+  revision 'master'
 
-  gunicorn_port 8000
+  #gunicorn_port 8000
 
   config_template 'config.yml.erb'
-  config_destination '/opt/whats_fresh/config/config.yml'
-  config_vars (
-    host: pg['host'],
-    port: pg['port'],
-    username: pg['user'],
-    password: pg['pass'],
-    db_name: pg['database_name'],
-    secret_key: pg['secret_key']
-  )
+  config_destination '/opt/whats_fresh/whats_fresh/config.yml'
+  config_vars settings_hash
 end
-
 
 nginx_app 'whats_fresh' do
   template 'whats_fresh.conf.erb'
