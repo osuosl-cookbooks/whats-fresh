@@ -64,8 +64,6 @@ if node['whats_fresh']['make_db']
   end
 end
 
-include_recipe 'whats-fresh::_monkey_patch'
-
 %w(shared static media config).each do |path|
   directory "#{node['whats_fresh']['application_dir']}/#{path}" do
     owner node['whats_fresh']['venv_owner']
@@ -75,11 +73,18 @@ include_recipe 'whats-fresh::_monkey_patch'
   end
 end
 
-template "#{node['whats_fresh']['application_dir']}/config/config.yml" do
-  source 'config.yml.erb'
+python_webapp 'whats_fresh' do
+  create_user true
+  path node['whats_fresh']['application_dir']
   owner node['whats_fresh']['venv_owner']
   group node['whats_fresh']['venv_group']
-  variables(
+
+  repository node['whats_fresh']['repository']
+  revision node['whats_fresh']['git_branch']
+
+  config_template 'config.yml.erb'
+  config_destination "#{node['whats_fresh']['application_dir']}/config/config.yml"
+  config_vars variables(
     host: pg['host'],
     port: pg['port'],
     username: pg['user'],
@@ -87,28 +92,19 @@ template "#{node['whats_fresh']['application_dir']}/config/config.yml" do
     db_name: pg['database_name'],
     secret_key: pg['secret_key']
   )
+  django_migrate true
+  django_collectstatic true
+  interpreter 'python2.7'
 end
 
-application 'whats_fresh' do
-  path node['whats_fresh']['application_dir']
-  owner node['whats_fresh']['venv_owner']
-  group node['whats_fresh']['venv_group']
-  repository node['whats_fresh']['repository']
-  revision node['whats_fresh']['git_branch']
-  migrate true
+# TODO: manually set up gunicorn
 
-  django do
-    requirements 'requirements.txt'
-    debug node['whats_fresh']['debug']
-  end
-
-  gunicorn do
-    app_module :django
-    autostart true
-    port node['whats_fresh']['gunicorn_port']
-    loglevel 'debug'
-  end
-end
+# gunicorn do
+#   app_module :django
+#   autostart true
+#   port node['whats_fresh']['gunicorn_port']
+#   loglevel 'debug'
+# end
 
 nginx_app 'whats_fresh' do
   template 'whats_fresh.conf.erb'
