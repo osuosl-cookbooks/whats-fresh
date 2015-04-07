@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe 'whats-fresh::_centos' if platform_family?('rhel')
 include_recipe 'build-essential'
 include_recipe 'git'
 include_recipe 'python'
@@ -26,51 +25,13 @@ include_recipe 'database::postgresql'
 include_recipe 'postgis'
 include_recipe 'osl-nginx'
 
-magic_shell_environment 'PATH' do
-  value "/usr/pgsql-9.3/bin:$PATH"
-end
-
 pg = Chef::EncryptedDataBagItem.load('whats_fresh',
                                      node['whats_fresh']['databag'])
 
-if node['whats_fresh']['make_db']
-  postgresql_connection_info = {
-    host: pg['host'],
-    port: pg['port'],
-    username: pg['root_user'],
-    password: pg['root_pass']
-  }
-
-  # Create Postgres database
-  database pg['database_name'] do
-    connection postgresql_connection_info
-    provider Chef::Provider::Database::Postgresql
-    action :create
-  end
-
-  # Add Postgis extension to database
-  bash 'create Postgis extension in database' do
-    code <<-EOH
-      runuser -l postgres -c 'psql #{pg['database_name']} -c "CREATE EXTENSION IF NOT EXISTS postgis;"'
-    EOH
-  end
-
-  postgresql_database_user pg['user'] do
-    connection postgresql_connection_info
-    database_name pg['database_name']
-    password pg['pass']
-    privileges [:all]
-    action :create
-  end
-end
-
-%w(shared static media config).each do |path|
-  directory "#{node['whats_fresh']['application_dir']}/#{path}" do
-    owner node['whats_fresh']['venv_owner']
-    group node['whats_fresh']['venv_group']
-    mode 0755
-    recursive true
-  end
+directory "#{node['whats_fresh']['application_dir']}/config" do
+  owner node['whats_fresh']['venv_owner']
+  group node['whats_fresh']['venv_group']
+  recursive true
 end
 
 python_webapp 'whats_fresh' do
@@ -83,28 +44,26 @@ python_webapp 'whats_fresh' do
   revision node['whats_fresh']['git_branch']
 
   config_template 'config.yml.erb'
-  config_destination "#{node['whats_fresh']['application_dir']}/config/config.yml"
-  config_vars variables(
+  config_destination "#{node['whats_fresh']['application_dir']}" \
+    '/config/config.yml'
+  config_vars(
     host: pg['host'],
     port: pg['port'],
     username: pg['user'],
     password: pg['pass'],
     db_name: pg['database_name'],
-    secret_key: pg['secret_key']
+    secret_key: pg['secret_key'],
+
+    debug: node['whats_fresh']['debug'],
+    application_dir: node['whats_fresh']['application_dir']
+
   )
   django_migrate true
   django_collectstatic true
   interpreter 'python2.7'
+
+  gunicorn_port node['whats_fresh']['gunicorn_port']
 end
-
-# TODO: manually set up gunicorn
-
-# gunicorn do
-#   app_module :django
-#   autostart true
-#   port node['whats_fresh']['gunicorn_port']
-#   loglevel 'debug'
-# end
 
 nginx_app 'whats_fresh' do
   template 'whats_fresh.conf.erb'
@@ -112,19 +71,6 @@ nginx_app 'whats_fresh' do
 end
 
 node.default['nginx']['default_site_enabled'] = false
-
-# Collect static files (css, js, etc)
-python_path = File.join(node['whats_fresh']['application_dir'], 'shared',
-                        'env', 'bin', 'python')
-manage_py_path = File.join(node['whats_fresh']['application_dir'],
-                           'current', node['whats_fresh']['subdirectory'],
-                           'manage.py')
-
-execute 'collect static files' do
-  command "#{python_path} #{manage_py_path} collectstatic --noi"
-  user node['whats_fresh']['venv_owner']
-  group node['whats_fresh']['venv_group']
-end
 
 selinux_policy_boolean 'httpd_can_network_connect' do
   value true
