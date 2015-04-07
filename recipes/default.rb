@@ -28,7 +28,11 @@ include_recipe 'osl-nginx'
 pg = Chef::EncryptedDataBagItem.load('whats_fresh',
                                      node['whats_fresh']['databag'])
 
-directory "#{node['whats_fresh']['application_dir']}/config" do
+magic_shell_environment 'WF_CONFIG_DIR' do
+  value node['whats_fresh']['config_dir']
+end
+
+directory node['whats_fresh']['config_dir'] do
   owner node['whats_fresh']['venv_owner']
   group node['whats_fresh']['venv_group']
   recursive true
@@ -44,8 +48,7 @@ python_webapp 'whats_fresh' do
   revision node['whats_fresh']['git_branch']
 
   config_template 'config.yml.erb'
-  config_destination "#{node['whats_fresh']['application_dir']}" \
-    '/config/config.yml'
+  config_destination "#{node['whats_fresh']['config_dir']}/config.yml"
   config_vars(
     host: pg['host'],
     port: pg['port'],

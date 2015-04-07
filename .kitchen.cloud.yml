@@ -45,28 +45,33 @@ platforms:
 suites:
   - name: default
     run_list:
+      - recipe[whats-fresh::_centos]
       - recipe[postgresql::server]
+      - recipe[postgis::default]
+      - recipe[whats-fresh::database]
       - recipe[whats-fresh::default]
     attributes:
       whats_fresh:
-        make_db: true
         debug: false
   - name: develop
     run_list:
+      - recipe[whats-fresh::_centos]
       - recipe[postgresql::server]
+      - recipe[postgis::default]
+      - recipe[whats-fresh::database]
       - recipe[whats-fresh::default]
     attributes:
       whats_fresh:
-        make_db: true
         debug: true
   - name: both
     run_list:
+      - recipe[whats-fresh::_centos]
       - recipe[postgresql::server]
+      - recipe[whats-fresh::database]
       - recipe[whats-fresh::default]
       - recipe[working-waterfronts::default]
     attributes:
       whats_fresh:
-        make_db: true
         debug: true
       working_waterfronts:
         debug: true
