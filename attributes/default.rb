@@ -3,7 +3,6 @@ default['whats_fresh']['venv_owner'] = 'root'
 default['whats_fresh']['venv_group'] = 'root'
 default['whats_fresh']['databag'] = 'pgsql'
 default['postgis']['template_name'] = nil
-default['whats_fresh']['make_db'] = false
 
 default['whats_fresh']['debug'] = false
 default['whats_fresh']['git_branch'] = 'develop'
@@ -11,11 +10,14 @@ default['whats_fresh']['repository'] = 'https://github.com/osu-cass/whats-fresh-
 
 default['whats_fresh']['server_name'] = node['fqdn']
 default['whats_fresh']['gunicorn_port'] = 8080
-default['whats_fresh']['access_log'] = "#{node['nginx']['log_dir']}/whats_fresh/access.log"
-default['whats_fresh']['error_log'] = "#{node['nginx']['log_dir']}/whats_fresh/error.log"
+default['whats_fresh']['access_log'] = "#{node['nginx']['log_dir']}" \
+  '/whats_fresh/access.log'
+default['whats_fresh']['error_log'] = "#{node['nginx']['log_dir']}" \
+  '/whats_fresh/error.log'
 default['whats_fresh']['subdirectory'] = '' # add trailing slash if in a subdir
 
-override['python']['pip_location'] = "#{node['python']['prefix_dir']}/bin/pip2.7"
+override['python']['pip_location'] = "#{node['python']['prefix_dir']}" \
+  '/bin/pip2.7'
 
 if platform_family?('rhel')
   override['postgresql']['enable_pgdg_yum'] = true

@@ -6,9 +6,6 @@ description "Installs/Configures What's Fresh dependencies"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.1.16'
 
-depends 'application'
-depends 'application_nginx'
-depends 'application_python'
 depends 'build-essential'
 depends 'database'
 depends 'geos'
@@ -18,6 +15,7 @@ depends 'osl-nginx'
 depends 'postgis'
 depends 'postgresql'
 depends 'python'
+depends 'python-webapp'
 depends 'selinux_policy'
 depends 'yum'
 depends 'yum-epel'

@@ -24,15 +24,15 @@ USE_TZ: True
 
 
 ##### Static and media files #####
-STATIC_ROOT: "<%= node['whats_fresh']['application_dir'] %>/static"
+STATIC_ROOT: "<%= @application_dir %>/static"
 STATIC_URL: "/static/"
 
-MEDIA_ROOT: "<%= node['whats_fresh']['application_dir'] %>/media"
+MEDIA_ROOT: "<%= @application_dir %>/media"
 MEDIA_URL: "/media/"
 
 
 ##### Set debug on/off #####
-DEBUG: <%= node['whats_fresh']['debug'] %>
+DEBUG: <%= @debug %>
 
 # Proximity used for location queries if
 # proximity parameter is not also passed
