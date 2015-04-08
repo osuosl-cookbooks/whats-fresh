@@ -1,12 +1,12 @@
-default['whats_fresh']['application_dir'] = '/opt/whats_fresh'
-default['whats_fresh']['config_dir'] = '/opt/whats_fresh_config'
+default['whats_fresh']['application_dir'] = '/opt/git_whats_fresh'
+default['whats_fresh']['config_dir'] = '/opt/whats_fresh/config'
 default['whats_fresh']['venv_owner'] = 'root'
 default['whats_fresh']['venv_group'] = 'root'
 default['whats_fresh']['databag'] = 'pgsql'
 default['postgis']['template_name'] = nil
 
 default['whats_fresh']['debug'] = false
-default['whats_fresh']['git_branch'] = 'develop'
+default['whats_fresh']['git_branch'] = 'e7697a987de3d7d9c0439398956996ec0bd17694'
 default['whats_fresh']['repository'] = 'https://github.com/osu-cass/whats-fresh-api'
 
 default['whats_fresh']['server_name'] = node['fqdn']
