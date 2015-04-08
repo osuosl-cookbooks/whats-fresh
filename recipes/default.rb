@@ -59,8 +59,8 @@ python_webapp 'whats_fresh' do
 
     debug: node['whats_fresh']['debug'],
     application_dir: node['whats_fresh']['application_dir']
-
   )
+
   django_migrate true
   django_collectstatic true
   interpreter 'python2.7'
