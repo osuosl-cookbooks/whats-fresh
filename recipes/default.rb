@@ -73,8 +73,6 @@ nginx_app 'whats_fresh' do
   cookbook 'whats-fresh'
 end
 
-node.default['nginx']['default_site_enabled'] = false
-
 selinux_policy_boolean 'httpd_can_network_connect' do
   value true
   notifies :start, 'service[nginx]', :immediate
