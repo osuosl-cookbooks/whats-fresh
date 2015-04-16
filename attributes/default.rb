@@ -21,6 +21,7 @@ override['python']['pip_location'] = "#{node['python']['prefix_dir']}" \
   '/bin/pip2.7'
 
 if platform_family?('rhel')
+  override['nginx']['default_site_enabled'] = false
   override['postgresql']['enable_pgdg_yum'] = true
   override['postgresql']['version'] = '9.3'
   override['postgresql']['server']['packages'] = %W(
