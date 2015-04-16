@@ -40,7 +40,6 @@ end
 
 python_webapp 'whats_fresh' do
   create_user true
-  path node['whats_fresh']['application_dir']
   owner node['whats_fresh']['venv_owner']
   group node['whats_fresh']['venv_group']
 

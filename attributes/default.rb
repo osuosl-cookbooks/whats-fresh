@@ -1,4 +1,4 @@
-default['whats_fresh']['application_dir'] = '/opt/git_whats_fresh'
+default['whats_fresh']['application_dir'] = '/opt/whats_fresh'
 default['whats_fresh']['config_dir'] = '/opt/whats_fresh/config'
 default['whats_fresh']['venv_owner'] = 'root'
 default['whats_fresh']['venv_group'] = 'root'
