@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+include_recipe 'postgresql::client'
+include_recipe 'database::postgresql'
+include_recipe 'postgis'
+
 pg = Chef::EncryptedDataBagItem.load('whats_fresh',
                                      node['whats_fresh']['databag'])
 
