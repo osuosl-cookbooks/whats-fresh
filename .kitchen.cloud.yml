@@ -50,6 +50,7 @@ suites:
       - recipe[postgis::default]
       - recipe[whats-fresh::database]
       - recipe[whats-fresh::default]
+      - recipe[whats-fresh::nginx]
     attributes:
       whats_fresh:
         debug: false
@@ -60,6 +61,7 @@ suites:
       - recipe[postgis::default]
       - recipe[whats-fresh::database]
       - recipe[whats-fresh::default]
+      - recipe[whats-fresh::nginx]
     attributes:
       whats_fresh:
         debug: true
@@ -69,6 +71,7 @@ suites:
       - recipe[postgresql::server]
       - recipe[whats-fresh::database]
       - recipe[whats-fresh::default]
+      - recipe[whats-fresh::nginx]
       - recipe[working-waterfronts::default]
     attributes:
       whats_fresh:

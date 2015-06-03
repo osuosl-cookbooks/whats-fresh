@@ -20,10 +20,6 @@
 include_recipe 'build-essential'
 include_recipe 'git'
 include_recipe 'python'
-include_recipe 'postgresql::client'
-include_recipe 'database::postgresql'
-include_recipe 'postgis'
-include_recipe 'osl-nginx'
 
 pg = Chef::EncryptedDataBagItem.load('whats_fresh',
                                      node['whats_fresh']['databag'])
@@ -67,12 +63,3 @@ python_webapp 'whats_fresh' do
   gunicorn_port node['whats_fresh']['gunicorn_port']
 end
 
-nginx_app 'whats_fresh' do
-  template 'whats_fresh.conf.erb'
-  cookbook 'whats-fresh'
-end
-
-selinux_policy_boolean 'httpd_can_network_connect' do
-  value true
-  notifies :start, 'service[nginx]', :immediate
-end
