@@ -11,6 +11,8 @@ default['whats_fresh']['repository'] = 'https://github.com/osu-cass/whats-fresh-
 
 default['whats_fresh']['server_name'] = node['fqdn']
 default['whats_fresh']['gunicorn_port'] = 8080
+default['whats_fresh']['access_log'] = "#{node['nginx']['log_dir']}/whats_fresh/access.log"
+default['whats_fresh']['error_log'] = "#{node['nginx']['log_dir']}/whats_fresh/error.log"
 default['whats_fresh']['subdirectory'] = '' # add trailing slash if in a subdir
 
 override['python']['pip_location'] = "#{node['python']['prefix_dir']}/bin/pip2.7"

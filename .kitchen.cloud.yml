@@ -60,3 +60,15 @@ suites:
       whats_fresh:
         make_db: true
         debug: true
+  - name: both
+    run_list:
+      - recipe[postgresql::server]
+      - recipe[whats-fresh::default]
+      - recipe[working-waterfronts::default]
+    attributes:
+      whats_fresh:
+        make_db: true
+        debug: true
+      working_waterfronts:
+        debug: true
+        make_db: true
