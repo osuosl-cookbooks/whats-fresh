@@ -1,11 +1,6 @@
 source 'https://supermarket.chef.io'
 
 metadata
-cookbook 'application'
-cookbook 'application_nginx',
-         git: 'git://github.com/poise/application_nginx.git',
-         ref: '6339af0963139cb42946dec4111defd59502d064'
-cookbook 'application_python'
 cookbook 'build-essential'
 cookbook 'database'
 cookbook 'firewall', git: 'git@github.com:osuosl-cookbooks/firewall'
@@ -19,7 +14,7 @@ cookbook 'osl-nginx', git: 'git@github.com:osuosl-cookbooks/osl-nginx'
 cookbook 'postgis'
 cookbook 'postgresql'
 cookbook 'python'
-cookbook 'python-webapp', git: 'git@github.com:osuosl-cookbooks/python-webapp'
+cookbook 'python-webapp', git: 'git@github.com:osuosl-cookbooks/python-webapp', branch: 'common_recipe'
 cookbook 'selinux_policy'
 cookbook 'yum-epel'
 cookbook 'yum-ius'
