@@ -37,3 +37,8 @@ DEBUG: <%= @debug %>
 # Proximity used for location queries if
 # proximity parameter is not also passed
 DEFAULT_PROXIMITY: 20
+
+HAYSTACK_CONNECTIONS:
+    default:
+        ENGINE: 'haystack.backends.whoosh_backend.WhooshEngine'
+        PATH: "<%= @haystack_index %>"
