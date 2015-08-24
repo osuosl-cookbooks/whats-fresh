@@ -21,8 +21,8 @@ include_recipe 'postgresql::client'
 include_recipe 'database::postgresql'
 include_recipe 'postgis'
 
-pg = Chef::EncryptedDataBagItem.load('whats_fresh',
-                                     node['whats_fresh']['databag'])
+pg = Chef::EncryptedDataBagItem.load(node['whats_fresh']['databag'],
+                                     'pg')
 
 magic_shell_environment 'PATH' do
   value '/usr/pgsql-9.3/bin:$PATH'

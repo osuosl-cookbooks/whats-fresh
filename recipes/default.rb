@@ -21,8 +21,8 @@ include_recipe 'build-essential'
 include_recipe 'git'
 include_recipe 'python'
 
-pg = Chef::EncryptedDataBagItem.load('whats_fresh',
-                                     node['whats_fresh']['databag'])
+pg = Chef::EncryptedDataBagItem.load(node['whats_fresh']['databag'],
+                                     'pg')
 
 magic_shell_environment 'WF_CONFIG_DIR' do
   value node['whats_fresh']['config_dir']
