@@ -64,14 +64,15 @@ python_webapp 'whats_fresh' do
   gunicorn_port node['whats_fresh']['gunicorn_port']
 end
 
-# Run search index update
-unless Dir.exist? node['whats_fresh']['search_index']
-  bash "create search index" do
-    user node['whats_fresh']['venv_owner']
-    cwd "#{node['whats_fresh']['application_dir']}/source"
-    code <<-EOH
-      #{node['whats_fresh']['application_dir']}/venv/bin/python manage.py \
+# index database if index currently does not exist
+# index is automatically updated on imte save and thus this
+# does not need to be rerun
+bash 'create search index' do
+  user node['whats_fresh']['venv_owner']
+  cwd "#{node['whats_fresh']['application_dir']}/source"
+  code <<-EOH
+    #{node['whats_fresh']['application_dir']}/venv/bin/python manage.py \
 rebuild_index --noinput # ~FC002
-    EOH
-  end
+  EOH
+  not_if Dir.exist? node['whats_fresh']['search_index']
 end

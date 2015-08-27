@@ -12,6 +12,6 @@ end
 
 describe 'create Postgis extension to database and create table' do
   describe command("runuser -l postgres -c 'psql whats_fresh -c \"\\dx\"'") do
-    its(:stdout) { should match /(.*?)postgis(.*)/ }
+    its(:stdout) { should match(/(.*?)postgis(.*)/) }
   end
 end
