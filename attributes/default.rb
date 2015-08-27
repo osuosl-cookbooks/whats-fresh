@@ -3,7 +3,7 @@ default['whats_fresh']['config_dir'] = '/opt/whats_fresh/config'
 default['whats_fresh']['search_index'] = '/opt/whats_fresh/whoosh_index'
 default['whats_fresh']['venv_owner'] = 'root'
 default['whats_fresh']['venv_group'] = 'root'
-default['whats_fresh']['databag'] = 'pgsql'
+default['whats_fresh']['databag'] = 'whats_fresh'
 default['postgis']['template_name'] = nil
 
 default['whats_fresh']['debug'] = false
@@ -28,9 +28,9 @@ if platform_family?('rhel')
   override['postgresql']['enable_pgdg_yum'] = true
   override['postgresql']['version'] = '9.3'
   override['postgresql']['server']['packages'] = %W(
-    postgresql#{node['postgresql']['version'].gsub('.', '')}-server)
+    postgresql#{node['postgresql']['version'].delete('.')}-server)
   override['postgresql']['client']['packages'] = %W(
-    postgresql#{node['postgresql']['version'].gsub('.', '')}-devel
+    postgresql#{node['postgresql']['version'].delete('.')}-devel
     libpqxx-devel)
   override['postgresql']['server']['service_name'] = 'postgresql-9.3'
 end
