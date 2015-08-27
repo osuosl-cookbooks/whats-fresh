@@ -1,5 +1,5 @@
 {
-  "id": "pgsql",
+  "id": "pg",
   "host": {
     "encrypted_data": "PDuoiispJArkXPkGmehCBRdjFKV9VNkGCEk0SnCGqM8=\n",
     "hmac": "O5a7nWsaUNOcFziWn6OhSmmWOp8V6RAMZfoTjVRRgV8=\n",
